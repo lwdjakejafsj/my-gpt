@@ -1,6 +1,6 @@
 package io.luowei.chatgpt.security;
 
-import io.luowei.chatgpt.model.security.vo.JwtToken;
+import io.luowei.chatgpt.model.security.JwtToken;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

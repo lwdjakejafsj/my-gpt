@@ -73,7 +73,7 @@ public class Configuration {
     private HashMap<Model, Executor> executorGroup;
 
     // http keywords
-    public static final String SSE_CONTENT_TYPE = "text/event-stream";
+    public static final String SSE_CONTENT_TYPE = "text/event-stream"; // sse请求
     public static final String DEFAULT_USER_AGENT = "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)";
     public static final String APPLICATION_JSON = "application/json";
     public static final String JSON_CONTENT_TYPE = APPLICATION_JSON + "; charset=utf-8";

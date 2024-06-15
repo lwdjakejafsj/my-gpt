@@ -22,6 +22,7 @@ public class DefaultOpenAiSession implements OpenAiSession {
         this.configuration = configuration;
         this.executorGroup = executorGroup;
     }
+
     @Override
     public EventSource completions(ChatCompletionRequest chatCompletionRequest, EventSourceListener eventSourceListener) throws Exception {
         Executor executor = executorGroup.get(chatCompletionRequest.getModel());

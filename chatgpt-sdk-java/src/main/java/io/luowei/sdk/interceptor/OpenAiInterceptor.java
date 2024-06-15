@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 /**
- * 自定义拦截器
+ * 自定义http拦截器
  * author: luowei
  * date:
  */

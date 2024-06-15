@@ -60,7 +60,7 @@ public class ApiTest {
             @Override
             public void onEvent(EventSource eventSource, @Nullable String id, @Nullable String type, String data) {
                 ChatCompletionResponse response = JSON.parseObject(data, ChatCompletionResponse.class);
-                log.info("测试结果 onEvent：{}", response.getData());
+                log.info("测试结果 onEvent：{}，type：{}", response.toString(),type);
                 // type 消息类型，add 增量，finish 结束，error 错误，interrupted 中断
                 if (EventType.finish.getCode().equals(type)) {
                     ChatCompletionResponse.Meta meta = JSON.parseObject(response.getMeta(), ChatCompletionResponse.Meta.class);
@@ -78,4 +78,12 @@ public class ApiTest {
         new CountDownLatch(1).await();
     }
 
+    @Test
+    public void test_genImages() throws Exception {
+        ImageCompletionRequest request = new ImageCompletionRequest();
+        request.setModel(Model.COGVIEW_3);
+        request.setPrompt("画个小狗");
+        ImageCompletionResponse response = openAiSession.genImages(request);
+        log.info("测试结果：{}", JSON.toJSONString(response));
+    }
 }

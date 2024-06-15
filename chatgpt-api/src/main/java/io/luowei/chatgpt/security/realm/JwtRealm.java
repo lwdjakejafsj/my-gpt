@@ -1,6 +1,6 @@
 package io.luowei.chatgpt.security.realm;
 
-import io.luowei.chatgpt.model.security.vo.JwtToken;
+import io.luowei.chatgpt.model.security.JwtToken;
 import io.luowei.chatgpt.utils.JwtUtil;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

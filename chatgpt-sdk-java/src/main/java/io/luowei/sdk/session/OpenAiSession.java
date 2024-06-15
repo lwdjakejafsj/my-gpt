@@ -16,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
  * date:
  */
 public interface OpenAiSession {
+    // 流式问答接口
     EventSource completions(ChatCompletionRequest chatCompletionRequest, EventSourceListener eventSourceListener) throws Exception;
 
     CompletableFuture<String> completions(ChatCompletionRequest chatCompletionRequest) throws Exception;

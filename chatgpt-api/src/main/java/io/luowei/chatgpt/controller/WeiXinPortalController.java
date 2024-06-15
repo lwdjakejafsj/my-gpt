@@ -1,8 +1,8 @@
 package io.luowei.chatgpt.controller;
 
-import io.luowei.chatgpt.model.receive.model.BehaviorMatter;
-import io.luowei.chatgpt.model.receive.model.MessageTextEntity;
-import io.luowei.chatgpt.service.WeiXinValidateService;
+import io.luowei.chatgpt.model.weixin.BehaviorMatter;
+import io.luowei.chatgpt.model.weixin.MessageTextEntity;
+import io.luowei.chatgpt.service.wechat.WeiXinValidateService;
 import io.luowei.chatgpt.utils.XmlUtil;
 import io.luowei.sdk.model.ChatCompletionRequest;
 import io.luowei.sdk.model.ChatCompletionSyncResponse;
@@ -15,7 +15,6 @@ import io.luowei.sdk.session.defaults.DefaultOpenAiSessionFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +25,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 微信公众号接口
