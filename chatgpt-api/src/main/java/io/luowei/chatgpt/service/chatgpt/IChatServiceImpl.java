@@ -54,36 +54,26 @@ public class IChatServiceImpl extends AbstractChatService {
             public void onEvent(EventSource eventSource, @Nullable String id, @Nullable String type, String data) {
                 ChatCompletionResponse response = JSON.parseObject(data, ChatCompletionResponse.class);
 
-//                List<ChatCompletionResponse.Choice> choices = response.getChoices();
-//                for (ChatCompletionResponse.Choice chatChoice : choices) {
-//                    ChatCompletionResponse.Delta delta = chatChoice.getDelta();
-//                    if (Constants.Role.ASSISTANT.getCode().equals(delta.getRole())) continue;
-//                    // 应答完成
-//                    String finishReason = chatChoice.getFinishReason();
-//                    if (StringUtils.isNoneBlank(finishReason) && "stop".equals(finishReason)) {
-//                        emitter.complete();
-//                        break;
-//                    }
-//                    // 发送信息
-//                    try {
-//                        emitter.send(delta.getContent());
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-
-                if (EventType.finish.getCode().equals(type)) {
-                    emitter.complete();
-                    ChatCompletionResponse.Meta meta = com.alibaba.fastjson.JSON.parseObject(response.getMeta(), ChatCompletionResponse.Meta.class);
-                    log.info("[输出结束] Tokens {}", com.alibaba.fastjson.JSON.toJSONString(meta));
+                log.info("response：{}",response);
+                List<ChatCompletionResponse.Choice> choices = response.getChoices();
+                for (ChatCompletionResponse.Choice chatChoice : choices) {
+                    ChatCompletionResponse.Delta delta = chatChoice.getDelta();
+                    if (!Constants.Role.ASSISTANT.getCode().equals(delta.getRole())) continue;
+                    // 应答完成
+                    String finishReason = chatChoice.getFinishReason();
+                    if (StringUtils.isNoneBlank(finishReason) && "stop".equals(finishReason)) {
+                        emitter.complete();
+                        break;
+                    }
+                    // 发送信息
+                    try {
+                        log.info("data：{}",delta.getContent());
+                        emitter.send(delta.getContent());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
-                // 发送信息
-                try {
-                    emitter.send(response.getData());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
             }
 
             @Override
