@@ -1,7 +1,13 @@
 package io.luowei.chatgpt.service.chatgpt;
 
 import com.alibaba.fastjson2.JSON;
+import io.luowei.chatgpt.dao.repository.IOpenAiRepository;
 import io.luowei.chatgpt.model.chatgpt.ChatProcessAggregate;
+import io.luowei.chatgpt.model.chatgpt.rule.LogicCheckTypeVO;
+import io.luowei.chatgpt.model.chatgpt.rule.RuleLogicEntity;
+import io.luowei.chatgpt.model.chatgpt.rule.UserAccountQuotaEntity;
+import io.luowei.chatgpt.service.chatgpt.rule.ILogicFilter;
+import io.luowei.chatgpt.service.chatgpt.rule.factory.DefaultLogicFactory;
 import io.luowei.sdk.constants.Constants;
 import io.luowei.sdk.model.*;
 import io.luowei.sdk.session.OpenAiSession;
@@ -14,15 +20,38 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class IChatServiceImpl extends AbstractChatService {
 
+    @Resource
+    private DefaultLogicFactory logicFactory;
+
+
+    // 次数校验和敏感词过滤
+    @Override
+    protected RuleLogicEntity<ChatProcessAggregate> doCheckLogic(ChatProcessAggregate chatProcess, UserAccountQuotaEntity userAccountQuotaEntity, String... logics) throws Exception {
+        Map<String, ILogicFilter<UserAccountQuotaEntity>> logicFilterMap = logicFactory.openLogicFilter();
+        RuleLogicEntity<ChatProcessAggregate> entity = null;
+
+        for (String code : logics) {
+            if (DefaultLogicFactory.LogicModel.NULL.getCode().equals(code))
+                continue;
+            entity = logicFilterMap.get(code).filter(chatProcess, userAccountQuotaEntity);
+            if (!LogicCheckTypeVO.SUCCESS.equals(entity.getType()))
+                return entity;
+        }
+
+        return entity != null ? entity : RuleLogicEntity.<ChatProcessAggregate>builder()
+                .type(LogicCheckTypeVO.SUCCESS).data(chatProcess).build();
+    }
 
     @Override
     public void doMessageResponse(ChatProcessAggregate chatProcess, ResponseBodyEmitter emitter) throws Exception {

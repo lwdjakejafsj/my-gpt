@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import io.luowei.chatgpt.common.constants.Constants;
 import io.luowei.chatgpt.model.auth.AuthStateEntity;
 import io.luowei.chatgpt.model.auth.AuthTypeVO;
-import io.luowei.chatgpt.model.auth.Response;
+import io.luowei.chatgpt.model.Response;
 import io.luowei.chatgpt.service.auth.IAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

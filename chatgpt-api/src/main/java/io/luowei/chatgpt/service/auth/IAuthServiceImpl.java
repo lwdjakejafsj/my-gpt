@@ -1,6 +1,7 @@
 package io.luowei.chatgpt.service.auth;
 
 import com.google.common.cache.Cache;
+import io.jsonwebtoken.Claims;
 import io.luowei.chatgpt.model.auth.AuthStateEntity;
 import io.luowei.chatgpt.model.auth.AuthTypeVO;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +34,21 @@ public class IAuthServiceImpl extends AbstractAuthService{
         codeCache.invalidate(openId);
         codeCache.invalidate(code);
 
-        return null;
+        return AuthStateEntity.builder()
+                .code(AuthTypeVO.A0000.getCode())
+                .info(AuthTypeVO.A0000.getInfo())
+                .openId(openId)
+                .build();
     }
 
     @Override
     public boolean checkToken(String token) {
-        return false;
+        return isVerify(token);
+    }
+
+    @Override
+    public String openId(String token) {
+        Claims claims = decode(token);
+        return claims.get("openId").toString();
     }
 }
